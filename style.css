@@ -1,4 +1,32 @@
 html, body {
     overflow: hidden;
     margin: 0;
-}   
+}
+
+#mouseCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+#gridCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 3;
+    height: 100%;
+    width: 2em;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
+}
+

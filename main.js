@@ -7,8 +7,6 @@ gridCanvas.height = window.innerHeight
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-
-
 var height = gridCanvas.height
 var width = gridCanvas.width
 
@@ -25,8 +23,13 @@ var isNotMouseUp = false;
 
 var points = [];
 var existingLines = [];
+var existingLinesColors = [];
 
-var lineColor = 'darkred'
+
+var lineColorInput =document.getElementById("line-color");
+
+var lineColor = document.getElementById("line-color").value
+
 var lineWidth = 4;
 var gridPointColor = 'orange'
 var gridPointSize = 3
@@ -53,6 +56,10 @@ function getMousePos(canvas, evt) {
     };
 }
 
+lineColorInput.addEventListener('input', e => {
+    lineColor = document.getElementById("line-color").value
+})
+
 canvas.addEventListener('mousedown', e => {
     if (hasLoaded && e.button === 0) {
         if (!isDrawing) {
@@ -60,8 +67,8 @@ canvas.addEventListener('mousedown', e => {
             startMouseY = e.clientY - bounds.top;
             var pointStart = getNearestPoint(mouseX, mouseY)
             if (isMouseInsidePoint(startMouseX, startMouseY, pointStart.x, pointStart.y)) {
-                startX=pointStart.x
-                startY=pointStart.y
+                startX = pointStart.x
+                startY = pointStart.y
             }
             isDrawing = true;
         }
@@ -70,7 +77,6 @@ canvas.addEventListener('mousedown', e => {
     }
 });
 canvas.addEventListener('mouseup', e => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (hasLoaded && e.button === 0) {
         if (isDrawing) {
             var pointEnd = getNearestPoint(mouseX, mouseY)
@@ -81,6 +87,7 @@ canvas.addEventListener('mouseup', e => {
                     endX: pointEnd.x,
                     endY: pointEnd.y
                 });
+                existingLinesColors.push(lineColor);
                 isNotMouseUp = true;
                 isDrawing = false;
             }
@@ -101,22 +108,26 @@ canvas.addEventListener('mousemove', e => {
 });
 
 function draw() {
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+   
     for (var i = 0; i < existingLines.length; ++i) {
+        ctx.beginPath();
         var line = existingLines[i];
+        ctx.strokeStyle = existingLinesColors[i];
         ctx.moveTo(line.startX, line.startY);
         ctx.lineCap = 'round';
         ctx.lineTo(line.endX, line.endY);
+        ctx.stroke();
+
     }
 
-    ctx.stroke();
-
+    
     if (isDrawing) {
+        ctx.beginPath();
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
-        ctx.beginPath();
+        
         ctx.moveTo(startX, startY);
         ctx.lineCap = 'round';
         ctx.lineTo(mouseX, mouseY);
