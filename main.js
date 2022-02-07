@@ -97,10 +97,10 @@ canvas.addEventListener('mouseup', e => {
     }
 });
 canvas.addEventListener('mousemove', e => {
+    
     if (hasLoaded) {
         mouseX = e.clientX - bounds.left;
         mouseY = e.clientY - bounds.top;
-
         if (isDrawing) {
             draw();
         }
